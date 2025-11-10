@@ -2,19 +2,19 @@
 
 <section class="page-header">
     <div class="page-header-content">
-        <h1>📞 Contact Us</h1>
+        <h1>📞 Kontak Us</h1>
         <p>We'd love to hear from you! Get in touch with us today.</p>
     </div>
 </section>
 
-<section class="contact-page">
-    <div class="contact-container">
-        <!-- Contact Form -->
-        <div class="contact-form-section">
+<section class="Kontak-page">
+    <div class="Kontak-container">
+        <!-- Kontak Form -->
+        <div class="Kontak-form-section">
             <h2>Send Us a Message</h2>
             <p class="form-description">Have questions or special requests? Fill out the form below and we'll get back to you as soon as possible!</p>
             
-            <form class="contact-form" id="contactForm">
+            <form class="Kontak-form" id="KontakForm">
                 <div class="form-group">
                     <label for="name">Full Name *</label>
                     <input type="text" id="name" name="name" required placeholder="Your name">
@@ -52,11 +52,11 @@
             </form>
         </div>
 
-        <!-- Contact Information -->
-        <div class="contact-info-section">
+        <!-- Kontak Information -->
+        <div class="Kontak-info-section">
             <h2>Get In Touch</h2>
             
-            <div class="contact-info-card">
+            <div class="Kontak-info-card">
                 <div class="info-icon">📍</div>
                 <div class="info-content">
                     <h3>Visit Us</h3>
@@ -68,17 +68,17 @@
                 </div>
             </div>
 
-            <div class="contact-info-card">
+            <div class="Kontak-info-card">
                 <div class="info-icon">📞</div>
                 <div class="info-content">
                     <h3>Call or Text</h3>
                     <p><strong>WhatsApp:</strong></p>
-                    <a href="https://wa.me/6285974906945" class="contact-phone">+62 859-7490-6945</a>
+                    <a href="https://wa.me/6285974906945" class="Kontak-phone">+62 859-7490-6945</a>
                     <p class="info-note">Available during business hours</p>
                 </div>
             </div>
 
-            <div class="contact-info-card">
+            <div class="Kontak-info-card">
                 <div class="info-icon">🕐</div>
                 <div class="info-content">
                     <h3>Business Hours</h3>
@@ -88,13 +88,13 @@
                 </div>
             </div>
 
-            <div class="contact-info-card">
+            <div class="Kontak-info-card">
                 <div class="info-icon">💬</div>
                 <div class="info-content">
                     <h3>Quick Order</h3>
                     <p>Want to order right away?</p>
                     <a href="https://wa.me/6285974906945?text=Halo%20OurStuff,%20saya%20ingin%20order!" 
-                       class="btn-whatsapp-contact" target="_blank">
+                       class="btn-whatsapp-Kontak" target="_blank">
                         Chat on WhatsApp
                     </a>
                 </div>
@@ -146,18 +146,18 @@
             </div>
             <div class="faq-item">
                 <h4>🎉 Do you cater for events?</h4>
-                <p>Absolutely! We offer catering services for parties, corporate events, and special occasions. Contact us for details!</p>
+                <p>Absolutely! We offer catering services for parties, corporate events, and special occasions. Kontak us for details!</p>
             </div>
             <div class="faq-item">
                 <h4>⏰ Can I pre-order?</h4>
-                <p>Yes, you can pre-order by contacting us via WhatsApp. We recommend ordering at least 1 hour in advance.</p>
+                <p>Yes, you can pre-order by Kontaking us via WhatsApp. We recommend ordering at least 1 hour in advance.</p>
             </div>
         </div>
     </div>
 </section>
 
 <script>
-document.getElementById('contactForm').addEventListener('submit', function(e) {
+document.getElementById('KontakForm').addEventListener('submit', function(e) {
     e.preventDefault();
     
     // Get form data
