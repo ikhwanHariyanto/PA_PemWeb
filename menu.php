@@ -2,8 +2,8 @@
 
 <section class="page-header">
     <div class="page-header-content">
-        <h1>🍔 Our Menu</h1>
-        <p>Explore our delicious selection of premium burgers crafted with love!</p>
+        <h1>Menu Yang Tersedia</h1>
+        <p>Jelajahi pilihan burger premium kami yang lezat, dibuat dengan cinta!</p>
     </div>
 </section>
 

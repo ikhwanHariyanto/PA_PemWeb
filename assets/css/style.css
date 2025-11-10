@@ -15,13 +15,14 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 14px 50px;
+  padding: 16px 5rem;
 }
 
 .logo {
   font-weight: 700;
   font-size: 24px;
   color: #537b2f;
+  text-decoration: none;
 }
 
 .nav-menu {
@@ -51,10 +52,11 @@ body {
 .hero {
   background-color: #8da750;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
-  padding: 60px 14rem;
+  padding: 60px 10rem;
   flex-wrap: wrap;
+  gap: 5rem;
 }
 
 .hero-text {
