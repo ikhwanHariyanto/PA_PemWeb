@@ -18,7 +18,9 @@
 <body>
 
 <header class="main-header">
-    <div class="logo">OurStuffies</div>
+    <a href="index.php" class="logo">
+        <div class="logo">OurStuffies</div>
+    </a>
 
     <nav class="nav-menu">
         <a href="index.php" class="nav-item">
@@ -31,7 +33,7 @@
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M4 6H20M4 12H20M4 18H20" stroke="#537B2F" stroke-width="2" stroke-linecap="round"/></svg>
             <span>Menu</span>
         </a>
-        <a href="Lokasi.php" class="nav-item">
+        <a href="located.php" class="nav-item">
             <!-- Location Icon -->
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 3C8.13 3 5 6.13 5 10C5 15.25 12 21 12 21C12 21 19 15.25 19 10C19 6.13 15.87 3 12 3Z" stroke="#537B2F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
             <span>Lokasi</span>

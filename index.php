@@ -13,7 +13,7 @@
 </section>
 
 <section class="product-section">
-    <h2>Our Menu!</h2>
+    <h2>Menu Kami!</h2>
 
     <div class="product-grid">
 
@@ -56,15 +56,15 @@
 
     <div class="Lokasi-info">
         <div class="info-box">
-            <h3>📍 Address</h3>
+            <h3>Alamat</h3>
             <p>Blk. A-B No.53b, Gn. Kelua,<br> Kec. Samarinda Ulu, Kota Samarinda,<br> Kalimantan Timur 75243</p>
         </div>
         <div class="info-box">
-            <h3>📞 Kontak</h3>
+            <h3>Kontak</h3>
             <p>WhatsApp: +62 859-7490-6945</p>
         </div>
         <div class="info-box">
-            <h3>🕐 Opening Hours</h3>
+            <h3>Jam Operasional</h3>
             <p>Senin - Minggu: 10:00 Pagi - 5 Sore<br>Jika melebihi dari jam pelayanan, maka akan dikirim esok hari.</p>
         </div>
     </div>
