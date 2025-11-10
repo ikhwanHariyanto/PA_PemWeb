@@ -7,8 +7,8 @@
     </div>
 </section>
 
-<section class="location-main">
-    <div class="location-intro">
+<section class="Lokasi-main">
+    <div class="Lokasi-intro">
         <h2>Selamat Datang di OurStuffies!</h2>
         <p>Kami berada di tengah kota Samarinda, siap melayani Anda dengan menu paling lezat yang dibuat dengan cinta dan bahan berkualitas premium.Anda dapat memesan untuk pengantaran, kami siap memuaskan selera Anda!</p>
     </div>
@@ -27,8 +27,8 @@
         </div>
     </div>
 
-    <!-- Location Details -->
-    <div class="location-details">
+    <!-- Lokasi Details -->
+    <div class="Lokasi-details">
         <div class="detail-card">
             <div class="detail-icon">📍</div>
             <h3>Alamat</h3>
@@ -58,12 +58,12 @@
         <div class="detail-card">
             <div class="detail-icon">📞</div>
             <h3>Hubungi Kami</h3>
-            <div class="contact-info">
+            <div class="Kontak-info">
                 <p><strong>WhatsApp:</strong></p>
-                <a href="https://wa.me/6285974906945" class="contact-link" target="_blank">
+                <a href="https://wa.me/6285974906945" class="Kontak-link" target="_blank">
                     +62 859-7490-6945
                 </a>
-                <p class="contact-desc">Klik untuk chat langsung via WhatsApp</p>
+                <p class="Kontak-desc">Klik untuk chat langsung via WhatsApp</p>
             </div>
             <a href="https://wa.me/6285974906945?text=Halo%20OurStuff,%20saya%20ingin%20order%20burger!" 
                class="btn-whatsapp" target="_blank">
@@ -100,7 +100,7 @@
     </div>
 
     <!-- Call to Action -->
-    <div class="location-cta">
+    <div class="Lokasi-cta">
         <h2>Ready to Try Our Burgers?</h2>
         <p>Visit us today or order online for delivery!</p>
         <div class="cta-buttons">

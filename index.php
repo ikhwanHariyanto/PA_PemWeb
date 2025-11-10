@@ -37,13 +37,12 @@
             <p>Daging panggang dengan aroma barbeque smoky.</p>
             <span class="price">Rp13.000</span>
         </div>
-
     </div>
 </section>
 
-<section class="location-section">
+<section class="Lokasi-section">
     <h2>Visit Our Store</h2>
-    <p class="location-desc">Come and taste our delicious burgers at our restaurant!</p>
+    <p class="Lokasi-desc">Come and taste our delicious burgers at our restaurant!</p>
     
     <div class="map-container">
         <iframe 
@@ -55,13 +54,13 @@
         </iframe>
     </div>
 
-    <div class="location-info">
+    <div class="Lokasi-info">
         <div class="info-box">
             <h3>📍 Address</h3>
             <p>Blk. A-B No.53b, Gn. Kelua,<br> Kec. Samarinda Ulu, Kota Samarinda,<br> Kalimantan Timur 75243</p>
         </div>
         <div class="info-box">
-            <h3>📞 Contact</h3>
+            <h3>📞 Kontak</h3>
             <p>WhatsApp: +62 859-7490-6945</p>
         </div>
         <div class="info-box">
