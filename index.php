@@ -1,4 +1,7 @@
-<?php include 'includes/header.php'; ?>
+<?php 
+include 'includes/header.php'; 
+include 'koneksi.php';
+?>
 
 <section class="hero">
     <div class="hero-text">
@@ -17,32 +20,30 @@
 
     <div class="product-grid">
 
-        <div class="product-card">
-            <img src="assets/img/burger1.png" alt="">
-            <h3>Premium Cheeseburger</h3>
-            <p>Burger dengan daging lembut dan keju lumer.</p>
-            <span class="price">Rp13.000</span>
-        </div>
+    <?php 
+    
+    $query = "SELECT * FROM produk";
+    $query = mysqli_query($conn, $query);
 
-        <div class="product-card">
-            <img src="assets/img/burger2.png" alt="">
-            <h3>Spicy Double Patty</h3>
-            <p>Daging double dengan saus pedas khas.</p>
-            <span class="price">Rp13.000</span>
-        </div>
+    while ($row = mysqli_fetch_assoc($query)) {
+        echo '
+            <div class="product-card">
+                <img src ="' .$row['url_gambar']. '"alt ="'. $row['nama']. '">
+                <h3>'. $row['nama']. '</h3>
+                <p>'. $row['deskripsi']. '</p>
+                <span class = "price">Rp' . number_format($row['harga'], 0, ','. '.') .' </span>
+            </div>
+        ';
+    }
 
-        <div class="product-card">
-            <img src="assets/img/burger3.png" alt="">
-            <h3>Smoked BBQ Burger</h3>
-            <p>Daging panggang dengan aroma barbeque smoky.</p>
-            <span class="price">Rp13.000</span>
-        </div>
+    ?>
+
     </div>
 </section>
 
 <section class="Lokasi-section">
-    <h2>Visit Our Store</h2>
-    <p class="Lokasi-desc">Come and taste our delicious burgers at our restaurant!</p>
+    <h2>Alamat Kami</h2>
+    <!-- <p class="Lokasi-desc">Come and taste our delicious burgers at our restaurant!</p> -->
     
     <div class="map-container">
         <iframe 
