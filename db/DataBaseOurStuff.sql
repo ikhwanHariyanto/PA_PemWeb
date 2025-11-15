@@ -3,7 +3,6 @@
 -- Fitur: Menu, Keranjang, Checkout, Struk, WA
 -- ============================================
 
--- Buat basis data (opsional)
 CREATE DATABASE IF NOT EXISTS sistem_pemesanan CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 USE sistem_pemesanan;
 
@@ -73,132 +72,133 @@ CREATE TABLE alamat (
 -- ============================================
 -- TABEL KERANJANG
 -- ============================================
-CREATE TABLE carts (
+CREATE TABLE keranjang (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    customer_id INT NULL,
+    pelanggan_id INT NULL,
     session_id VARCHAR(128) NULL,
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    CONSTRAINT uq_cart_session UNIQUE (customer_id, session_id),
-    INDEX idx_session (session_id)
+    dibuat_pada DATETIME DEFAULT CURRENT_TIMESTAMP,
+    diperbarui_pada DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    CONSTRAINT uq_cart_session UNIQUE (pelanggan_id, session_id),
+    INDEX idx_session (session_id),
+    FOREIGN KEY (pelanggan_id) REFERENCES pelanggan(id) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ============================================
 -- TABEL ITEM KERANJANG
 -- ============================================
-CREATE TABLE cart_items (
+CREATE TABLE item_keranjang (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    cart_id INT NOT NULL,
-    product_id INT NOT NULL,
+    keranjang_id INT NOT NULL,
+    produk_id INT NOT NULL,
     qty INT NOT NULL DEFAULT 1,
-    price_at_add DECIMAL(10,2) NOT NULL,
-    notes VARCHAR(255),
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (cart_id) REFERENCES carts(id) ON DELETE CASCADE,
-    FOREIGN KEY (product_id) REFERENCES products(id),
-    INDEX idx_cart (cart_id),
-    INDEX idx_product (product_id)
+    harga_saat_tambah DECIMAL(10,2) NOT NULL,
+    catatan VARCHAR(255),
+    dibuat_pada DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (keranjang_id) REFERENCES keranjang(id) ON DELETE CASCADE,
+    FOREIGN KEY (produk_id) REFERENCES produk(id),
+    INDEX idx_keranjang (keranjang_id),
+    INDEX idx_produk (produk_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ============================================
 -- TABEL PESANAN
 -- ============================================
-CREATE TABLE orders (
+CREATE TABLE pesanan (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    order_number VARCHAR(20) NOT NULL UNIQUE,
-    customer_id INT NOT NULL,
-    address_id INT,
+    nomor_pesanan VARCHAR(20) NOT NULL UNIQUE,
+    pelanggan_id INT NOT NULL,
+    alamat_id INT,
     status VARCHAR(30) DEFAULT 'pending',
-    total_amount DECIMAL(12,2) NOT NULL DEFAULT 0.00,
-    shipping_fee DECIMAL(10,2) DEFAULT 0.00,
-    notes TEXT,
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (customer_id) REFERENCES customers(id),
-    FOREIGN KEY (address_id) REFERENCES addresses(id),
-    INDEX idx_order_number (order_number),
-    INDEX idx_customer (customer_id),
+    total DECIMAL(12,2) NOT NULL DEFAULT 0.00,
+    ongkir DECIMAL(10,2) DEFAULT 0.00,
+    catatan TEXT,
+    dibuat_pada DATETIME DEFAULT CURRENT_TIMESTAMP,
+    diperbarui_pada DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (pelanggan_id) REFERENCES pelanggan(id),
+    FOREIGN KEY (alamat_id) REFERENCES alamat(id),
+    INDEX idx_nomor (nomor_pesanan),
+    INDEX idx_pelanggan (pelanggan_id),
     INDEX idx_status (status),
-    INDEX idx_created (created_at)
+    INDEX idx_dibuat (dibuat_pada)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ============================================
 -- TABEL ITEM PESANAN
 -- ============================================
-CREATE TABLE order_items (
+CREATE TABLE item_pesanan (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    order_id INT NOT NULL,
-    product_id INT NOT NULL,
+    pesanan_id INT NOT NULL,
+    produk_id INT NOT NULL,
     qty INT NOT NULL,
-    unit_price DECIMAL(10,2) NOT NULL,
+    harga_satuan DECIMAL(10,2) NOT NULL,
     subtotal DECIMAL(12,2) NOT NULL,
-    notes VARCHAR(255),
-    FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE,
-    FOREIGN KEY (product_id) REFERENCES products(id),
-    INDEX idx_order (order_id),
-    INDEX idx_product (product_id)
+    catatan VARCHAR(255),
+    FOREIGN KEY (pesanan_id) REFERENCES pesanan(id) ON DELETE CASCADE,
+    FOREIGN KEY (produk_id) REFERENCES produk(id),
+    INDEX idx_pesanan (pesanan_id),
+    INDEX idx_produk (produk_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ============================================
 -- TABEL PEMBAYARAN
 -- ============================================
-CREATE TABLE payments (
+CREATE TABLE pembayaran (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    order_id INT NOT NULL,
-    method VARCHAR(50),
+    pesanan_id INT NOT NULL,
+    metode VARCHAR(50),
     status VARCHAR(30) DEFAULT 'unpaid',
-    amount DECIMAL(12,2) NOT NULL,
-    paid_at DATETIME NULL,
+    jumlah DECIMAL(12,2) NOT NULL,
+    dibayar_pada DATETIME NULL,
     metadata JSON NULL,
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (order_id) REFERENCES orders(id),
-    INDEX idx_order (order_id),
+    dibuat_pada DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (pesanan_id) REFERENCES pesanan(id),
+    INDEX idx_pesanan (pesanan_id),
     INDEX idx_status (status)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ============================================
 -- TABEL STRUK
 -- ============================================
-CREATE TABLE receipts (
+CREATE TABLE struk (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    order_id INT NOT NULL UNIQUE,
-    receipt_number VARCHAR(30) NOT NULL UNIQUE,
-    content TEXT,
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE,
-    INDEX idx_receipt_number (receipt_number)
+    pesanan_id INT NOT NULL UNIQUE,
+    nomor_struk VARCHAR(30) NOT NULL UNIQUE,
+    konten TEXT,
+    dibuat_pada DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (pesanan_id) REFERENCES pesanan(id) ON DELETE CASCADE,
+    INDEX idx_nomor_struk (nomor_struk)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ============================================
 -- TABEL LOG WHATSAPP
 -- ============================================
-CREATE TABLE wa_outbound (
+CREATE TABLE log_wa (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    order_id INT,
-    phone_to VARCHAR(32),
-    message TEXT,
+    pesanan_id INT,
+    telepon_tujuan VARCHAR(32),
+    pesan TEXT,
     wa_url VARCHAR(255),
-    sent_at DATETIME NULL,
+    dikirim_pada DATETIME NULL,
     status VARCHAR(30) DEFAULT 'pending',
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (order_id) REFERENCES orders(id),
-    INDEX idx_order (order_id),
+    dibuat_pada DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (pesanan_id) REFERENCES pesanan(id),
+    INDEX idx_pesanan (pesanan_id),
     INDEX idx_status (status)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ============================================
--- DATA SAMPLE (OPTIONAL)
+-- SAMPLE DATA
 -- ============================================
 
--- Sample Kategori
-INSERT INTO categories (name, slug, description) VALUES
+-- Kategori
+INSERT INTO kategori (nama, slug, deskripsi) VALUES
 ('Kebab', 'kebab', 'Aneka kebab dengan isian pilihan'),
 ('Burger', 'burger', 'Burger segar dengan daging berkualitas'),
 ('Minuman', 'minuman', 'Berbagai minuman segar'),
 ('Snack', 'snack', 'Camilan pelengkap');
 
--- Sample Produk
-INSERT INTO products (category_id, name, slug, description, price, stock, is_active) VALUES
+-- Produk
+INSERT INTO produk (kategori_id, nama, slug, deskripsi, harga, stok, aktif) VALUES
 (1, 'Kebab Ayam', 'kebab-ayam', 'Kebab dengan isian ayam dan sayuran segar', 15000, 50, 1),
 (1, 'Kebab Sapi', 'kebab-sapi', 'Kebab dengan isian daging sapi premium', 20000, 30, 1),
 (2, 'Burger Beef', 'burger-beef', 'Burger dengan patty daging sapi 100%', 25000, 40, 1),
@@ -207,221 +207,134 @@ INSERT INTO products (category_id, name, slug, description, price, stock, is_act
 (3, 'Jus Jeruk', 'jus-jeruk', 'Jus jeruk segar tanpa gula tambahan', 10000, 50, 1),
 (4, 'French Fries', 'french-fries', 'Kentang goreng crispy', 12000, 60, 1);
 
--- Sample Customer
-INSERT INTO customers (name, email, phone) VALUES
+-- Pelanggan
+INSERT INTO pelanggan (nama, email, telepon) VALUES
 ('John Doe', 'john@example.com', '628123456789'),
 ('Jane Smith', 'jane@example.com', '628987654321');
 
--- Sample Alamat
-INSERT INTO addresses (customer_id, label, street, city, postal_code) VALUES
+-- Alamat
+INSERT INTO alamat (pelanggan_id, label, jalan, kota, kode_pos) VALUES
 (1, 'Rumah', 'Jl. Merdeka No. 123', 'Jakarta', '12345'),
 (2, 'Kantor', 'Jl. Sudirman No. 456', 'Jakarta', '12346');
 
 -- ============================================
--- VIEWS BERGUNA
+-- VIEW: Detail Keranjang
 -- ============================================
-
--- View untuk melihat keranjang dengan detail produk
-CREATE OR REPLACE VIEW v_cart_details AS
+CREATE OR REPLACE VIEW v_item_keranjang AS
 SELECT 
-    c.id AS cart_id,
-    c.customer_id,
-    c.session_id,
-    ci.id AS cart_item_id,
-    ci.product_id,
-    p.name AS product_name,
-    p.image_url,
-    ci.qty,
-    ci.price_at_add,
-    (ci.qty * ci.price_at_add) AS subtotal,
-    ci.notes
-FROM carts c
-JOIN cart_items ci ON c.id = ci.cart_id
-JOIN products p ON ci.product_id = p.id;
-
--- View untuk melihat detail pesanan lengkap
-CREATE OR REPLACE VIEW v_order_details AS
-SELECT 
-    o.id AS order_id,
-    o.order_number,
-    o.status,
-    o.total_amount,
-    o.shipping_fee,
-    o.created_at AS order_date,
-    c.name AS customer_name,
-    c.phone AS customer_phone,
-    c.email AS customer_email,
-    a.street,
-    a.city,
-    a.postal_code,
-    oi.product_id,
-    p.name AS product_name,
-    oi.qty,
-    oi.unit_price,
-    oi.subtotal,
-    oi.notes AS item_notes
-FROM orders o
-JOIN customers c ON o.customer_id = c.id
-LEFT JOIN addresses a ON o.address_id = a.id
-JOIN order_items oi ON o.id = oi.order_id
-JOIN products p ON oi.product_id = p.id;
+    k.id AS keranjang_id,
+    k.pelanggan_id,
+    k.session_id,
+    ik.id AS item_keranjang_id,
+    ik.produk_id,
+    p.nama AS nama_produk,
+    p.url_gambar,
+    ik.qty,
+    ik.harga_saat_tambah,
+    (ik.qty * ik.harga_saat_tambah) AS subtotal,
+    ik.catatan
+FROM keranjang k
+JOIN item_keranjang ik ON k.id = ik.keranjang_id
+JOIN produk p ON ik.produk_id = p.id;
 
 -- ============================================
--- STORED PROCEDURE: Generate Order Number
+-- VIEW: Detail Pesanan
+-- ============================================
+CREATE OR REPLACE VIEW v_item_pesanan AS
+SELECT 
+    ps.id AS pesanan_id,
+    ps.nomor_pesanan,
+    ps.status,
+    ps.total,
+    ps.ongkir,
+    ps.dibuat_pada AS tanggal_pesanan,
+    pl.nama AS nama_pelanggan,
+    pl.telepon AS telepon_pelanggan,
+    a.jalan,
+    a.kota,
+    a.kode_pos,
+    ip.produk_id,
+    pr.nama AS nama_produk,
+    ip.qty,
+    ip.harga_satuan,
+    ip.subtotal,
+    ip.catatan AS catatan_item
+FROM pesanan ps
+JOIN pelanggan pl ON ps.pelanggan_id = pl.id
+LEFT JOIN alamat a ON ps.alamat_id = a.id
+JOIN item_pesanan ip ON ps.id = ip.pesanan_id
+JOIN produk pr ON ip.produk_id = pr.id;
+
+-- ============================================
+-- STORED PROCEDURE: Generate Nomor Pesanan
 -- ============================================
 DELIMITER //
-
-CREATE PROCEDURE sp_generate_order_number(OUT new_order_number VARCHAR(20))
+CREATE PROCEDURE sp_generate_nomor_pesanan(OUT new_nomor VARCHAR(20))
 BEGIN
     DECLARE today VARCHAR(8);
     DECLARE seq INT;
-    
-    SET today = DATE_FORMAT(NOW(), '%Y%m%d');
-    
-    SELECT COALESCE(MAX(CAST(SUBSTRING(order_number, 10) AS UNSIGNED)), 0) + 1
-    INTO seq
-    FROM orders
-    WHERE order_number LIKE CONCAT('ORD', today, '%');
-    
-    SET new_order_number = CONCAT('ORD', today, LPAD(seq, 4, '0'));
-END //
 
+    SET today = DATE_FORMAT(NOW(), '%Y%m%d');
+
+    SELECT COALESCE(MAX(CAST(SUBSTRING(nomor_pesanan, 10) AS UNSIGNED)), 0) + 1
+    INTO seq
+    FROM pesanan
+    WHERE nomor_pesanan LIKE CONCAT('ORD', today, '%');
+
+    SET new_nomor = CONCAT('ORD', today, LPAD(seq, 4, '0'));
+END //
 DELIMITER ;
 
 -- ============================================
 -- STORED PROCEDURE: Process Checkout
 -- ============================================
 DELIMITER //
-
 CREATE PROCEDURE sp_process_checkout(
-    IN p_cart_id INT,
-    IN p_customer_id INT,
-    IN p_address_id INT,
-    IN p_shipping_fee DECIMAL(10,2),
-    IN p_notes TEXT,
-    OUT p_order_id INT,
-    OUT p_order_number VARCHAR(20)
+    IN p_keranjang_id INT,
+    IN p_pelanggan_id INT,
+    IN p_alamat_id INT,
+    IN p_ongkir DECIMAL(10,2),
+    IN p_catatan TEXT,
+    OUT p_pesanan_id INT,
+    OUT p_nomor_pesanan VARCHAR(20)
 )
 BEGIN
     DECLARE v_total DECIMAL(12,2);
-    
-    -- Start transaction
+
     START TRANSACTION;
-    
-    -- Generate order number
-    CALL sp_generate_order_number(p_order_number);
-    
-    -- Create order
-    INSERT INTO orders (order_number, customer_id, address_id, shipping_fee, notes, total_amount)
-    VALUES (p_order_number, p_customer_id, p_address_id, p_shipping_fee, p_notes, 0);
-    
-    SET p_order_id = LAST_INSERT_ID();
-    
-    -- Copy cart items to order items
-    INSERT INTO order_items (order_id, product_id, qty, unit_price, subtotal, notes)
-    SELECT 
-        p_order_id,
-        ci.product_id,
-        ci.qty,
-        ci.price_at_add,
-        (ci.qty * ci.price_at_add),
-        ci.notes
-    FROM cart_items ci
-    WHERE ci.cart_id = p_cart_id;
-    
-    -- Calculate total
-    SELECT COALESCE(SUM(subtotal), 0) INTO v_total
-    FROM order_items
-    WHERE order_id = p_order_id;
-    
-    -- Update order total
-    UPDATE orders 
-    SET total_amount = v_total + p_shipping_fee
-    WHERE id = p_order_id;
-    
-    -- Clear cart
-    DELETE FROM cart_items WHERE cart_id = p_cart_id;
-    
-    -- Commit transaction
+
+    CALL sp_generate_nomor_pesanan(p_nomor_pesanan);
+
+    INSERT INTO pesanan (nomor_pesanan, pelanggan_id, alamat_id, ongkir, catatan, total)
+    VALUES (p_nomor_pesanan, p_pelanggan_id, p_alamat_id, p_ongkir, p_catatan, 0);
+
+    SET p_pesanan_id = LAST_INSERT_ID();
+
+    INSERT INTO item_pesanan (pesanan_id, produk_id, qty, harga_satuan, subtotal, catatan)
+    SELECT p_pesanan_id, ik.produk_id, ik.qty, ik.harga_saat_tambah, (ik.qty*ik.harga_saat_tambah), ik.catatan
+    FROM item_keranjang ik
+    WHERE ik.keranjang_id = p_keranjang_id;
+
+    SELECT COALESCE(SUM(subtotal),0) INTO v_total
+    FROM item_pesanan
+    WHERE pesanan_id = p_pesanan_id;
+
+    UPDATE pesanan SET total = v_total + p_ongkir WHERE id = p_pesanan_id;
+
+    DELETE FROM item_keranjang WHERE keranjang_id = p_keranjang_id;
+
     COMMIT;
 END //
-
 DELIMITER ;
 
 -- ============================================
 -- FUNCTION: Format Rupiah
 -- ============================================
 DELIMITER //
-
 CREATE FUNCTION fn_format_rupiah(amount DECIMAL(12,2))
 RETURNS VARCHAR(50)
 DETERMINISTIC
 BEGIN
     RETURN CONCAT('Rp ', FORMAT(amount, 0, 'id_ID'));
 END //
-
 DELIMITER ;
-
--- ============================================
--- CONTOH PENGGUNAAN
--- ============================================
-
--- Contoh 1: Tambah item ke keranjang
-/*
--- Buat keranjang baru
-INSERT INTO carts (session_id) VALUES ('sess_abc123');
-SET @cart_id = LAST_INSERT_ID();
-
--- Tambah item ke keranjang
-INSERT INTO cart_items (cart_id, product_id, qty, price_at_add, notes)
-VALUES (@cart_id, 1, 2, 15000, 'Pedas');
-*/
-
--- Contoh 2: Proses checkout
-/*
-CALL sp_process_checkout(
-    @cart_id,           -- cart_id
-    1,                  -- customer_id
-    1,                  -- address_id
-    5000,              -- shipping_fee
-    'Kirim sore hari',  -- notes
-    @new_order_id,      -- output: order_id
-    @new_order_number   -- output: order_number
-);
-
-SELECT @new_order_id, @new_order_number;
-*/
-
--- Contoh 3: Generate receipt
-/*
-INSERT INTO receipts (order_id, receipt_number, content)
-VALUES (
-    @new_order_id,
-    CONCAT('RCP', DATE_FORMAT(NOW(), '%Y%m%d'), LPAD(@new_order_id, 4, '0')),
-    JSON_OBJECT(
-        'order_number', @new_order_number,
-        'customer_name', 'John Doe',
-        'total', 35000
-    )
-);
-*/
-
--- Contoh 4: Generate WhatsApp link
-/*
-INSERT INTO wa_outbound (order_id, phone_to, message, status)
-SELECT 
-    o.id,
-    c.phone,
-    CONCAT(
-        'Halo, saya ', c.name, '. ',
-        'Saya sudah melakukan pesanan dengan nomor *', o.order_number, '*. ',
-        'Total: Rp ', FORMAT(o.total_amount, 0), '. ',
-        'Alamat: ', a.street, ', ', a.city, '. ',
-        'Mohon konfirmasi ya.'
-    ),
-    'pending'
-FROM orders o
-JOIN customers c ON o.customer_id = c.id
-LEFT JOIN addresses a ON o.address_id = a.id
-WHERE o.id = @new_order_id;
-*/

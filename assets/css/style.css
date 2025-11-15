@@ -27,6 +27,7 @@ body {
 
 .nav-menu {
   display: flex;
+  flex-direction: row;
   gap: 32px;
 }
 
@@ -44,8 +45,46 @@ body {
   opacity: 0.7;
 }
 
+.nav-item span:last-child {
+  position: relative;
+}
+
+.nav-item span:last-child::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 3px;
+  border-radius: 4px;             
+  background-color: #537b2f;
+  transform: translateY(4px); 
+  opacity: 0;
+  transition: all 0.3s ease;
+}
+
+.nav-item:hover span:last-child::after {
+  transform: translateY(0); 
+  opacity: 1;               
+}
+
 .nav-item svg {
   margin-bottom: 3px;
+}
+
+.nav-toggle {
+  display: none;
+  flex-direction: column;
+  gap: 4px;
+  cursor: pointer;
+}
+
+.nav-toggle span {
+  display: block;
+  width: 25px;
+  height: 3px;
+  background-color: #537b2f;
+  border-radius: 4px;
 }
 
 /* HERO SECTION */
@@ -256,7 +295,7 @@ body {
 /* Page Header */
 .page-header {
   background: linear-gradient(135deg, #8da750 0%, #537b2f 100%);
-  padding: 80px 40px 60px;
+  padding: 40px 40px;
   text-align: center;
   color: white;
 }
@@ -272,7 +311,7 @@ body {
   font-size: 18px;
   font-weight: 400;
   opacity: 0.95;
-  max-width: 600px;
+  max-width: 700px;
   margin: 0 auto;
 }
 
@@ -641,7 +680,7 @@ body {
    ============================================ */
 
 .menu-page {
-  padding: 60px 40px;
+  padding: 40px 40px;
   max-width: 1400px;
   margin: 0 auto;
 }
@@ -684,7 +723,7 @@ body {
 }
 
 .menu-section-title {
-  font-size: 32px;
+  font-size: 2rem;
   color: #537b2f;
   margin-bottom: 30px;
   text-align: center;
@@ -693,9 +732,10 @@ body {
 
 /* Menu Grid */
 .menu-grid {
-  display: grid;
+  display: flex;
   grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
   gap: 30px;
+  justify-content: center;
 }
 
 .menu-item {
@@ -704,6 +744,9 @@ body {
   overflow: hidden;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
   transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  width: 320px;
 }
 
 .menu-item:hover {
@@ -758,6 +801,9 @@ body {
 
 .menu-item-content {
   padding: 20px;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
 }
 
 .menu-item-content h3 {
@@ -772,20 +818,24 @@ body {
   color: #666;
   line-height: 1.6;
   margin-bottom: 15px;
+  word-wrap: break-word;
 }
 
 .menu-item-footer {
   display: flex;
-  justify-content: space-between;
   align-items: center;
   padding-top: 15px;
   border-top: 1px solid #eee;
+  margin-top: auto;
+  justify-content: flex-start;
+  gap: 1rem;
 }
 
 .price {
   font-size: 22px;
   font-weight: 700;
   color: #537b2f;
+  white-space: nowrap;
 }
 
 .btn-order-menu {
@@ -797,6 +847,9 @@ body {
   font-size: 14px;
   font-weight: 600;
   transition: all 0.3s ease;
+  display: inline-block;
+  text-align: center;
+  margin-left: auto;
 }
 
 .btn-order-menu:hover {
@@ -854,20 +907,21 @@ body {
   text-align: center;
   background: linear-gradient(135deg, #8da750 0%, #537b2f 100%);
   color: white;
-  padding: 50px 30px;
+  padding: 3rem 2rem;
+  margin: 0 30rem;
   border-radius: 16px;
   margin-top: 60px;
 }
 
 .menu-cta h2 {
   font-size: 32px;
-  margin-bottom: 15px;
+  margin-bottom: 1rem;
   font-weight: 700;
 }
 
 .menu-cta p {
   font-size: 18px;
-  margin-bottom: 25px;
+  margin-bottom: 1.5rem;
 }
 
 .btn-whatsapp-large {
@@ -1267,7 +1321,7 @@ body {
 
 .form-footer {
   text-align: center;
-  margin-top: 25px;
+  margin-top: 16px;
   font-size: 14px;
   color: #666;
 }
@@ -1698,6 +1752,51 @@ body {
 }
 
 @media (max-width: 768px) {
+
+  .nav-menu {
+    position: fixed; /* tetap di layar saat scroll */
+    top: 0;
+    right: -250px; /* sembunyikan di luar layar */
+    width: 160px; /* lebar sidebar */
+    height: 100vh; /* tinggi full layar */
+    background-color: #fff;
+    flex-direction: column;
+    gap: 16px;
+    padding: 60px 20px; /* space untuk header */
+    box-shadow: -2px 0 6px rgba(0,0,0,0.2);
+    transition: right 0.3s ease; /* animasi sliding */
+    z-index: 1001;
+  }
+
+  .nav-menu.active {
+    right: 0; /* muncul dari kanan */
+  }
+
+  .nav-toggle {
+    display: flex; /* hamburger muncul di mobile */
+    flex-direction: column;
+    gap: 4px;
+    cursor: pointer;
+  }
+
+  .nav-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0,0,0,0.5); /* semi-transparent */
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease;
+    z-index: 1000;
+  }
+
+  .nav-overlay.active {
+    opacity: 1;
+    visibility: visible;
+  }
+
   .menu-page,
   .Kontak-page,
   .dashboard-page {
