@@ -219,10 +219,6 @@ $result_orders = mysqli_query($conn, $query_orders);
                 </table>
             </div>
 
-            <!-- Order Detail Modal Placeholder -->
-            <div class="info-box">
-                <p>💡 <strong>Tip:</strong> Klik "Lihat" untuk melihat detail pesanan. Gunakan "Perbarui" untuk mengubah status pesanan.</p>
-            </div>
         </div>
     </div>
 
