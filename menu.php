@@ -92,7 +92,7 @@ while ($kategori = mysqli_fetch_assoc($resultKategori)) {
                                     <input type="hidden" name="product_id" value="<?php echo $produk['id']; ?>">
                                     <button type="submit" class="btn-add-cart" 
                                             <?php echo ($produk['stok'] <= 0) ? 'disabled' : ''; ?>>
-                                        Add
+                                        Tambah
                                     </button>
                                 </form>
                                 <!-- WhatsApp Order
@@ -153,10 +153,8 @@ document.querySelectorAll('.add-to-cart-form').forEach(form => {
         
         const formData = new FormData(this);
         const button = this.querySelector('.btn-add-cart');
-        const originalText = button.textContent;
         
         button.disabled = true;
-        button.textContent = '...';
         
         fetch('add_to_cart.php', {
             method: 'POST',
@@ -164,9 +162,6 @@ document.querySelectorAll('.add-to-cart-form').forEach(form => {
         })
         .then(response => response.text())
         .then(data => {
-            button.textContent = '✓';
-            button.style.background = '#28a745';
-            
             // Update cart badge di header
             const cartBadge = document.querySelector('.cart-badge-count');
             if (cartBadge) {
@@ -183,20 +178,10 @@ document.querySelectorAll('.add-to-cart-form').forEach(form => {
                 }
             }
             
-            setTimeout(() => {
-                button.textContent = originalText;
-                button.style.background = '';
-                button.disabled = false;
-            }, 1500);
+            button.disabled = false;
         })
         .catch(error => {
-            button.textContent = 'Error';
-            button.style.background = '#dc3545';
-            setTimeout(() => {
-                button.textContent = originalText;
-                button.style.background = '';
-                button.disabled = false;
-            }, 2000);
+            button.disabled = false;
         });
     });
 });
