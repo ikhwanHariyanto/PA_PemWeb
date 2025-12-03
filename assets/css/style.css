@@ -391,9 +391,12 @@ body {
 /* Lokasi Details Grid */
 .Lokasi-details {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(3, 1fr);
   gap: 30px;
   margin-bottom: 60px;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .detail-card {
@@ -686,6 +689,7 @@ body {
 
   .Lokasi-details {
     grid-template-columns: 1fr;
+    padding: 0 20px;
   }
 
   .reasons-grid {
