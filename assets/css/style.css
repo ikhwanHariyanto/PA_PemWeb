@@ -1907,18 +1907,30 @@ body {
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
 }
 
+.checkout-container {
+  width: 100%;
+  max-width: 900px; /* Lebih sempit untuk checkout form */
+  margin: 60px auto;
+  padding: 40px;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
 .checkout-page-container {
   flex: 1;
 }
 
-.cart-container h2 {
+.cart-container h2,
+.checkout-container h2 {
   font-size: 32px;
   color: #333;
   margin-bottom: 30px;
   font-weight: 700;
 }
 
-.cart-container > p {
+.cart-container > p,
+.checkout-container > p {
   font-size: 16px;
   color: #666;
   margin-bottom: 25px;

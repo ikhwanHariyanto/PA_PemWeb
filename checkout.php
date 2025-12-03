@@ -136,7 +136,7 @@ if (isset($_POST['complete_order'])) {
 }
 ?>
 
-<div class="cart-container checkout-page-container">
+<div class="checkout-container checkout-page-container">
     <h2>Konfirmasi Pesanan</h2>
     <p>Silakan lengkapi detail Anda dan konfirmasi pesanan.</p>
 
