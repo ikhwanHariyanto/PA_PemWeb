@@ -90,7 +90,16 @@ if (isset($_POST['complete_order'])) {
                 $sauce_options = isset($item['sauce_options']) && is_array($item['sauce_options']) 
                     ? implode(',', $item['sauce_options']) 
                     : '';
-                $item_sauce = mysqli_real_escape_string($conn, $sauce_options);
+                
+                // Gabungkan saus + catatan jadi satu
+                $combined_notes = '';
+                if (!empty($sauce_options)) {
+                    $combined_notes = "Saus: $sauce_options";
+                }
+                if (!empty($item_notes)) {
+                    $combined_notes .= ($combined_notes ? ' | ' : '') . "Catatan: $item_notes";
+                }
+                $final_notes = mysqli_real_escape_string($conn, $combined_notes);
                 
                 // Cari produk_id berdasarkan nama
                 $query_find_product = "SELECT id FROM produk WHERE nama = '$item_name' LIMIT 1";
@@ -100,8 +109,8 @@ if (isset($_POST['complete_order'])) {
                     $product = mysqli_fetch_assoc($result_product);
                     $product_id = $product['id'];
                     
-                    $query_insert_item = "INSERT INTO item_pesanan (pesanan_id, produk_id, qty, harga_satuan, subtotal, catatan, level_pedas) 
-                                          VALUES ($order_id, $product_id, $item_qty, $item_price, $subtotal, '$item_notes', '$item_sauce')";
+                    $query_insert_item = "INSERT INTO item_pesanan (pesanan_id, produk_id, qty, harga_satuan, subtotal, catatan) 
+                                          VALUES ($order_id, $product_id, $item_qty, $item_price, $subtotal, '$final_notes')";
                     if (!mysqli_query($conn, $query_insert_item)) {
                         throw new Exception("Gagal menyimpan item pesanan");
                     }
@@ -127,7 +136,7 @@ if (isset($_POST['complete_order'])) {
 }
 ?>
 
-<div class="cart-container">
+<div class="cart-container checkout-page-container">
     <h2>Konfirmasi Pesanan</h2>
     <p>Silakan lengkapi detail Anda dan konfirmasi pesanan.</p>
 

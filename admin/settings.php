@@ -386,7 +386,7 @@ function getSetting($key, $default = '') {
                 </form>
             </div>
 
-            <!-- Danger Zone -->
+            <!-- Danger Zone
             <div class="content-section" style="border: 2px solid #e74c3c;">
                 <div class="section-header">
                     <h2 style="color: #e74c3c;"> Zona Bahaya</h2>
@@ -401,7 +401,7 @@ function getSetting($key, $default = '') {
                     <button class="btn btn-danger" onclick="resetDatabase()">Reset Database</button>
                     <button class="btn btn-danger" onclick="deleteAccount()">Hapus Akun Admin</button>
                 </div>
-            </div>
+            </div> -->
         </div>
     </div>
 

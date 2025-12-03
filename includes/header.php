@@ -76,7 +76,7 @@ if (isset($_SESSION['cart']) && is_array($_SESSION['cart'])) {
             <span class="material-icons">
                 shopping_cart
             </span>
-            <span>Cart</span>
+            <span>Keranjang</span>
             <?php if ($cart_count > 0): ?>
                 <span class="cart-badge-count"><?php echo $cart_count; ?></span>
             <?php endif; ?>

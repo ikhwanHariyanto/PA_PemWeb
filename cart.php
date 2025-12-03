@@ -126,7 +126,9 @@ if (isset($_SESSION['cart']) && is_array($_SESSION['cart'])) {
                                 endforeach; 
                                 ?>
                             </div>
-                            <small style="color: #666; font-size: 12px; margin-top: 5px; display: block;">Anda bisa memilih lebih dari satu</small>
+                            <small style="color: #666; font-size: 12px; margin-top: 5px; display: block;">
+                                <strong>Aturan:</strong> "Tidak Bersaus" hanya bisa dipilih sendiri. "Pedas" dan "Manis" bisa dipilih bersamaan.
+                            </small>
                         </div>
                         
                         <div class="form-group">
@@ -191,14 +193,34 @@ if (isset($_SESSION['cart']) && is_array($_SESSION['cart'])) {
 </div>
 
 <script>
-// Toggle active class untuk checkbox saus
+// Toggle active class dan logic untuk checkbox saus
 document.querySelectorAll('.sauce-option input[type="checkbox"]').forEach(checkbox => {
     checkbox.addEventListener('change', function() {
-        if (this.checked) {
-            this.parentElement.classList.add('active');
-        } else {
-            this.parentElement.classList.remove('active');
+        const form = this.closest('.sauce-selector');
+        const tidakBersausCheckbox = form.querySelector('input[value="tidak-bersaus"]');
+        const pedasCheckbox = form.querySelector('input[value="pedas"]');
+        const manisCheckbox = form.querySelector('input[value="manis"]');
+        
+        // Jika "Tidak Bersaus" dicentang, uncheck yang lain
+        if (this.value === 'tidak-bersaus' && this.checked) {
+            if (pedasCheckbox) pedasCheckbox.checked = false;
+            if (manisCheckbox) manisCheckbox.checked = false;
         }
+        
+        // Jika "Pedas" atau "Manis" dicentang, uncheck "Tidak Bersaus"
+        if ((this.value === 'pedas' || this.value === 'manis') && this.checked) {
+            if (tidakBersausCheckbox) tidakBersausCheckbox.checked = false;
+        }
+        
+        // Update visual active class untuk semua checkbox
+        form.querySelectorAll('.sauce-option').forEach(option => {
+            const input = option.querySelector('input[type="checkbox"]');
+            if (input.checked) {
+                option.classList.add('active');
+            } else {
+                option.classList.remove('active');
+            }
+        });
     });
 });
 </script>

@@ -1,7 +1,6 @@
 * {
   /* max-width: auto; */
   box-sizing: border-box;
-  
 }
 
 body {
@@ -10,6 +9,9 @@ body {
   padding: 0;
   font-family: "Poppins", sans-serif;
   font-weight: 600;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
 
 .main-header {
@@ -647,6 +649,7 @@ body {
   color: white;
   text-align: center;
   padding: 25px;
+  margin-top: auto;
   /* margin-top: 60px; */
 }
 
@@ -1895,12 +1898,17 @@ body {
    ============================================ */
 
 .cart-container {
-  max-width: 1200px;
-  margin: 60px auto;
-  padding: 40px;
+  width: 100%;
+  max-width: 900px; /* Ubah angka ini untuk lebarin/kecilin container */
+  margin: 60px auto; /* 60px = jarak atas-bawah, auto = center horizontal */
+  padding: 40px; /* Ruang dalam container */
   background: white;
-  border-radius: 16px;
+  border-radius: 16px; /* Kelengkungan sudut */
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.checkout-page-container {
+  flex: 1;
 }
 
 .cart-container h2 {
@@ -2336,8 +2344,9 @@ body {
   border: 2px solid #dee2e6;
   padding: 30px;
   border-radius: 12px;
-  margin-bottom: 30px;
+  margin: 0 auto 30px;
   background: #f8f9fa;
+  max-width: 700px;
 }
 
 .checkout-summary h3 {
@@ -2506,7 +2515,7 @@ body {
 
 /* === PAYMENT QRIS PAGE === */
 .payment-page {
-  padding: 120px 20px 80px;
+  padding: 60px 20px;
   min-height: 100vh;
   background: #f9f9f9;
 }
