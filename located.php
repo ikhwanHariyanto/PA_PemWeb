@@ -44,7 +44,7 @@ include 'includes/settings_helper.php';
             <p><?php echo nl2br(getSetting('store_address', 'Blk. A-B No.53b, Gn. Kelua, Kec. Samarinda Ulu')); ?></p>
             <p>Kota <?php echo getSetting('store_city', 'Samarinda'); ?>, Kalimantan Timur</p>
             <p class="postal-code"><?php echo getSetting('store_postal', '75243'); ?></p>
-            <a href="https://maps.app.goo.gl/yourlink" class="btn-direction" target="_blank">Get Directions</a>
+            <a href="https://maps.app.goo.gl/yourlink" class="btn-direction" target="_blank">Dapatkan Petunjuk Arah</a>
         </div>
 
         <div class="detail-card">
@@ -82,17 +82,17 @@ include 'includes/settings_helper.php';
         <div class="reasons-grid">
             <div class="reason-card">
                 <div class="reason-icon"></div>
-                <h4>Premium Quality</h4>
+                <h4>Kualitas Premium</h4>
                 <p>Bahan-bahan segar berkualitas tinggi dipilih setiap hari</p>
             </div>
             <div class="reason-card">
                 <div class="reason-icon"></div>
-                <h4>Expert Chefs</h4>
+                <h4>Chef Ahli</h4>
                 <p>Tim chef berpengalaman yang passionate dalam setiap burger</p>
             </div>
             <div class="reason-card">
                 <div class="reason-icon"></div>
-                <h4>Fast Delivery</h4>
+                <h4>Pengantaran Cepat</h4>
                 <p>Layanan pengantaran cepat ke seluruh area Samarinda</p>
             </div>
         </div>
@@ -103,9 +103,9 @@ include 'includes/settings_helper.php';
         <h2>Siap Mencoba Burger Kami?</h2>
         <p>Kunjungi kami hari ini atau pesan online untuk pengantaran!</p>
         <div class="cta-buttons">
-            <a href="menu.php" class="btn-primary">View Menu</a>
+            <a href="menu.php" class="btn-primary">Lihat Menu</a>
             <a href="https://wa.me/<?php echo getSetting('store_whatsapp', '6285974906945'); ?>?text=Halo%20OurStuff,%20saya%20ingin%20order!" 
-               class="btn-secondary" target="_blank">Order Now</a>
+               class="btn-secondary" target="_blank">Pesan Sekarang</a>
         </div>
     </div>
 </section>

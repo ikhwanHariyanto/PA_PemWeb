@@ -6,20 +6,6 @@ require_once 'includes/settings_helper.php';
 include 'includes/header.php'; 
 
 // --- Logika Penanganan Aksi ---
-// Update catatan pesanan
-if (isset($_POST['update_notes'])) {
-    $index = intval($_POST['item_index']);
-    $notes = trim($_POST['notes'] ?? '');
-    $sauce_selections = isset($_POST['sauce_options']) ? $_POST['sauce_options'] : [];
-    
-    if (isset($_SESSION['cart'][$index])) {
-        $_SESSION['cart'][$index]['notes'] = $notes;
-        $_SESSION['cart'][$index]['sauce_options'] = $sauce_selections;
-    }
-    header('Location: cart.php?updated=success');
-    exit;
-}
-
 if (isset($_POST['batal_beli'])) {
     unset($_SESSION['cart']);
     $_SESSION['cart'] = [];
@@ -28,6 +14,23 @@ if (isset($_POST['batal_beli'])) {
 }
 if (isset($_POST['lanjut_beli'])) {
     if (!empty($_SESSION['cart'])) {
+        // Validasi: Setiap item harus punya pilihan saus
+        $all_items_have_sauce = true;
+        $missing_sauce_items = [];
+        
+        foreach ($_SESSION['cart'] as $index => $item) {
+            if (empty($item['sauce_options']) || count($item['sauce_options']) == 0) {
+                $all_items_have_sauce = false;
+                $missing_sauce_items[] = $item['name'];
+            }
+        }
+        
+        if (!$all_items_have_sauce) {
+            $_SESSION['checkout_error'] = 'Silakan pilih saus untuk semua item sebelum melanjutkan ke checkout!';
+            header('Location: cart.php?error=sauce_required');
+            exit;
+        }
+        
         header('Location: checkout.php');
         exit;
     }
@@ -72,6 +75,15 @@ if (isset($_SESSION['cart']) && is_array($_SESSION['cart'])) {
         <p class="alert-message alert-success">Catatan pesanan berhasil diperbarui!</p>
     <?php endif; ?>
 
+    <?php if (isset($_GET['error']) && $_GET['error'] == 'sauce_required'): ?>
+        <p class="alert-message alert-error">
+            <?php 
+            echo isset($_SESSION['checkout_error']) ? $_SESSION['checkout_error'] : 'Silakan pilih saus untuk semua item!';
+            unset($_SESSION['checkout_error']);
+            ?>
+        </p>
+    <?php endif; ?>
+
     <?php if (empty($_SESSION['cart'])): ?>
         <div class="empty-cart">
             <p>Keranjang Anda masih kosong. Mari mulai berbelanja!</p>
@@ -93,8 +105,7 @@ if (isset($_SESSION['cart']) && is_array($_SESSION['cart'])) {
                 </div>
                 
                 <div class="cart-item-customization">
-                    <form method="POST" action="cart.php" class="customization-form">
-                        <input type="hidden" name="item_index" value="<?php echo $index; ?>">
+                    <div class="customization-form" data-item-index="<?php echo $index; ?>">
                         
                         <div class="form-group">
                             <label><?php echo getSetting('sauce_label', 'Pilih Saus'); ?>:</label>
@@ -140,9 +151,7 @@ if (isset($_SESSION['cart']) && is_array($_SESSION['cart'])) {
                                 placeholder="Contoh: Tanpa sayur, ekstra sambal, minta dikemas terpisah, dll."
                             ><?php echo htmlspecialchars($item['notes'] ?? ''); ?></textarea>
                         </div>
-                        
-                        <button type="submit" name="update_notes" class="btn-update-notes">Simpan Catatan</button>
-                    </form>
+                    </div>
                     
                     <?php if (!empty($item['notes']) || !empty($item['sauce_options'])): ?>
                     <div class="current-customization">
@@ -156,7 +165,7 @@ if (isset($_SESSION['cart']) && is_array($_SESSION['cart'])) {
                             ];
                             foreach ($item['sauce_options'] as $sauce): 
                             ?>
-                            <span class="badge badge-spice">🍽️ <?php echo $sauce_labels[$sauce] ?? $sauce; ?></span>
+                            <span class="badge badge-spice"> <?php echo $sauce_labels[$sauce] ?? $sauce; ?></span>
                             <?php endforeach; ?>
                         <?php endif; ?>
                         <?php if (!empty($item['notes'])): ?>
@@ -193,13 +202,15 @@ if (isset($_SESSION['cart']) && is_array($_SESSION['cart'])) {
 </div>
 
 <script>
-// Toggle active class dan logic untuk checkbox saus
+// Auto-save sauce selection
 document.querySelectorAll('.sauce-option input[type="checkbox"]').forEach(checkbox => {
     checkbox.addEventListener('change', function() {
-        const form = this.closest('.sauce-selector');
-        const tidakBersausCheckbox = form.querySelector('input[value="tidak-bersaus"]');
-        const pedasCheckbox = form.querySelector('input[value="pedas"]');
-        const manisCheckbox = form.querySelector('input[value="manis"]');
+        const form = this.closest('.customization-form');
+        const itemIndex = form.getAttribute('data-item-index');
+        const sauceSelector = this.closest('.sauce-selector');
+        const tidakBersausCheckbox = sauceSelector.querySelector('input[value="tidak-bersaus"]');
+        const pedasCheckbox = sauceSelector.querySelector('input[value="pedas"]');
+        const manisCheckbox = sauceSelector.querySelector('input[value="manis"]');
         
         // Jika "Tidak Bersaus" dicentang, uncheck yang lain
         if (this.value === 'tidak-bersaus' && this.checked) {
@@ -213,7 +224,7 @@ document.querySelectorAll('.sauce-option input[type="checkbox"]').forEach(checkb
         }
         
         // Update visual active class untuk semua checkbox
-        form.querySelectorAll('.sauce-option').forEach(option => {
+        sauceSelector.querySelectorAll('.sauce-option').forEach(option => {
             const input = option.querySelector('input[type="checkbox"]');
             if (input.checked) {
                 option.classList.add('active');
@@ -221,6 +232,67 @@ document.querySelectorAll('.sauce-option input[type="checkbox"]').forEach(checkb
                 option.classList.remove('active');
             }
         });
+        
+        // Auto-save via AJAX
+        const formData = new FormData();
+        formData.append('item_index', itemIndex);
+        formData.append('field', 'sauce');
+        
+        // Get all checked sauces
+        const checkedSauces = sauceSelector.querySelectorAll('input[type="checkbox"]:checked');
+        checkedSauces.forEach(sauce => {
+            formData.append('sauce_options[]', sauce.value);
+        });
+        
+        fetch('update_cart_item.php', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Reload page to update display
+                location.reload();
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    });
+});
+
+// Auto-save notes on blur (when user leaves textarea)
+document.querySelectorAll('.customization-form textarea').forEach(textarea => {
+    let saveTimeout;
+    
+    textarea.addEventListener('input', function() {
+        // Clear previous timeout
+        clearTimeout(saveTimeout);
+        
+        // Set new timeout to save after 1 second of no typing
+        saveTimeout = setTimeout(() => {
+            const form = this.closest('.customization-form');
+            const itemIndex = form.getAttribute('data-item-index');
+            const notes = this.value;
+            
+            const formData = new FormData();
+            formData.append('item_index', itemIndex);
+            formData.append('field', 'notes');
+            formData.append('notes', notes);
+            
+            fetch('update_cart_item.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Show subtle indicator that notes were saved
+                    if (window.showToast) {
+                        showToast('Catatan tersimpan', 'success', 1000);
+                    }
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        }, 1000);
     });
 });
 </script>

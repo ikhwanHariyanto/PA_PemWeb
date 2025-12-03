@@ -28,6 +28,9 @@ if (isset($_SESSION['cart']) && is_array($_SESSION['cart'])) {
 
     <!-- CSS -->
     <link rel="stylesheet" href="assets/css/style.css">
+    
+    <!-- Toast Notification Script -->
+    <script src="assets/js/toast.js" defer></script>
 </head>
 <body>
 

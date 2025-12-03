@@ -74,13 +74,13 @@ foreach ($items as $item) {
         }
         
         if (!empty($sauce_names)) {
-            $items_text .= "   🍽️ " . implode(', ', $sauce_names) . "%0A";
+            $items_text .= implode(', ', $sauce_names) . "%0A";
         }
     }
     
     // Tambahkan catatan jika ada
     if (!empty($item['catatan'])) {
-        $items_text .= "   📝 " . $item['catatan'] . "%0A";
+        $items_text .= $item['catatan'] . "%0A";
     }
     
     $no++;
