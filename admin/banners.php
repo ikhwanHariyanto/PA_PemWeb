@@ -1,9 +1,8 @@
 <?php
-require_once 'includes/session.php';
-requireAdminLogin();
-
 include '../koneksi.php';
-include 'includes/header.php';
+include 'includes/session.php';
+
+requireAdminLogin();
 
 // Handle Actions
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -108,6 +107,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 $banners = mysqli_query($conn, "SELECT * FROM banners ORDER BY urutan ASC, id DESC");
 ?>
 
+<?php include 'includes/admin_header.php'; ?>
+<?php include 'includes/admin_sidebar.php'; ?>
+
+<!-- Main Content -->
+<div class="admin-content">
+
 <div class="dashboard-content">
     <div class="content-header">
         <h2>🎨 Kelola Banner Slider</h2>
@@ -117,21 +122,25 @@ $banners = mysqli_query($conn, "SELECT * FROM banners ORDER BY urutan ASC, id DE
     </div>
 
     <?php if (isset($_SESSION['success_message'])): ?>
-        <div class="alert-message alert-success">
-            <?php 
-            echo $_SESSION['success_message']; 
-            unset($_SESSION['success_message']);
-            ?>
-        </div>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                if (typeof showToast === 'function') {
+                    showToast('<?php echo addslashes($_SESSION['success_message']); ?>', 'success', 2000);
+                }
+            });
+        </script>
+        <?php unset($_SESSION['success_message']); ?>
     <?php endif; ?>
 
     <?php if (isset($_SESSION['error_message'])): ?>
-        <div class="alert-message alert-error">
-            <?php 
-            echo $_SESSION['error_message']; 
-            unset($_SESSION['error_message']);
-            ?>
-        </div>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                if (typeof showToast === 'function') {
+                    showToast('<?php echo addslashes($_SESSION['error_message']); ?>', 'error', 3000);
+                }
+            });
+        </script>
+        <?php unset($_SESSION['error_message']); ?>
     <?php endif; ?>
 
     <div class="info-box" style="margin-bottom: 20px; padding: 15px; background: #fff3cd; border-left: 4px solid #ffc107; border-radius: 8px;">
@@ -189,11 +198,9 @@ $banners = mysqli_query($conn, "SELECT * FROM banners ORDER BY urutan ASC, id DE
                                 <button class="btn-edit" onclick='editBanner(<?php echo json_encode($banner); ?>)'>
                                     ✏️ Edit
                                 </button>
-                                <form method="POST" style="display: inline;" onsubmit="return confirm('Yakin ingin menghapus banner ini?');">
-                                    <input type="hidden" name="action" value="delete">
-                                    <input type="hidden" name="id" value="<?php echo $banner['id']; ?>">
-                                    <button type="submit" class="btn-delete">🗑️ Hapus</button>
-                                </form>
+                                <button class="btn-delete" onclick="confirmDelete(<?php echo $banner['id']; ?>, '<?php echo addslashes($banner['title'] ?? 'Banner'); ?>')">
+                                    🗑️ Hapus
+                                </button>
                             </div>
                         </td>
                     </tr>
@@ -576,7 +583,56 @@ function toggleStatus(id, status) {
     .then(response => response.json())
     .then(data => {
         if (data.success && window.showToast) {
-            showToast('Status banner berhasil diubah', 'success', 2000);
+            const statusText = status == 1 ? 'diaktifkan' : 'dinonaktifkan';
+            showToast('Banner berhasil ' + statusText, 'success', 2000);
+        }
+    })
+    .catch(error => {
+        if (window.showToast) {
+            showToast('Gagal mengubah status banner', 'error', 2000);
+        }
+    });
+}
+
+function confirmDelete(id, title) {
+    if (window.showToast) {
+        // Create custom confirmation toast
+        const message = 'Yakin hapus "' + title + '"?';
+        const confirmed = confirm(message);
+        if (confirmed) {
+            deleteBanner(id);
+        }
+    } else {
+        if (confirm('Yakin ingin menghapus banner "' + title + '"?')) {
+            deleteBanner(id);
+        }
+    }
+}
+
+function deleteBanner(id) {
+    const formData = new FormData();
+    formData.append('action', 'delete');
+    formData.append('id', id);
+    
+    fetch('banners.php', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => {
+        if (response.ok) {
+            if (window.showToast) {
+                showToast('Banner berhasil dihapus', 'success', 2000);
+            }
+            setTimeout(() => window.location.reload(), 500);
+        } else {
+            if (window.showToast) {
+                showToast('Gagal menghapus banner', 'error', 2000);
+            }
+        }
+    })
+    .catch(error => {
+        if (window.showToast) {
+            showToast('Terjadi kesalahan saat menghapus', 'error', 2000);
         }
     });
 }
@@ -590,4 +646,16 @@ window.onclick = function(event) {
 }
 </script>
 
-<?php include 'includes/footer.php'; ?>
+</div>
+
+<script>
+// Set active menu
+document.querySelectorAll('.menu-item').forEach(item => {
+    if (item.href === window.location.href) {
+        item.classList.add('active');
+    }
+});
+</script>
+
+</body>
+</html>
