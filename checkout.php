@@ -102,7 +102,7 @@ if (isset($_POST['complete_order'])) {
             
             // 2. Buat alamat pengiriman
             $query_insert_address = "INSERT INTO alamat (pelanggan_id, label, jalan, kota) 
-                                     VALUES ($customer_id, 'Default', '$customer_address', 'Jakarta')";
+                                     VALUES ($customer_id, 'Default', '$customer_address', 'Samarinda')";
             if (!mysqli_query($conn, $query_insert_address)) {
                 throw new Exception("Gagal menyimpan alamat");
             }

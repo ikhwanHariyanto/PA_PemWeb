@@ -398,21 +398,21 @@ function getSetting($key, $default = '') {
 
                     <div class="form-group">
                         <label>Pilihan Saus yang Tersedia</label>
-                        <div style="display: grid; gap: 10px;">
-                            <div style="display: flex; align-items: center; gap: 10px;">
+                        <div class="sauce-options-grid">
+                            <div class="sauce-option-item">
                                 <input type="checkbox" id="sauce_no_sauce" name="sauce_options[]" value="tidak-bersaus" 
                                        <?php echo (strpos(getSetting('sauce_options', 'tidak-bersaus,pedas,manis'), 'tidak-bersaus') !== false) ? 'checked' : ''; ?>>
-                                <label for="sauce_no_sauce" style="margin: 0; font-weight: normal;">Tidak Bersaus</label>
+                                <label for="sauce_no_sauce">Tidak Bersaus</label>
                             </div>
-                            <div style="display: flex; align-items: center; gap: 10px;">
+                            <div class="sauce-option-item">
                                 <input type="checkbox" id="sauce_spicy" name="sauce_options[]" value="pedas" 
                                        <?php echo (strpos(getSetting('sauce_options', 'tidak-bersaus,pedas,manis'), 'pedas') !== false) ? 'checked' : ''; ?>>
-                                <label for="sauce_spicy" style="margin: 0; font-weight: normal;">Pedas</label>
+                                <label for="sauce_spicy">Pedas</label>
                             </div>
-                            <div style="display: flex; align-items: center; gap: 10px;">
+                            <div class="sauce-option-item">
                                 <input type="checkbox" id="sauce_sweet" name="sauce_options[]" value="manis" 
                                        <?php echo (strpos(getSetting('sauce_options', 'tidak-bersaus,pedas,manis'), 'manis') !== false) ? 'checked' : ''; ?>>
-                                <label for="sauce_sweet" style="margin: 0; font-weight: normal;">Manis</label>
+                                <label for="sauce_sweet">Manis</label>
                             </div>
                         </div>
                         <small style="color: #666; display: block; margin-top: 8px;">Centang pilihan yang ingin Anda tampilkan ke pelanggan</small>
